@@ -1,0 +1,21 @@
+<h1>LOGIN</h1>
+
+{% if wrongPassword %}
+<P>Benutzername oder Passwort is falsch</P>
+{% endif %}
+
+
+<form action="/login/" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="redirect" value="{{ redirect }}">
+    <div>
+        <input name="username" type="text">
+    </div>
+    <div>
+        <input name="password" type="password">
+    </div>
+    <div>
+        <button>LOGIN</button>
+    </div>
+
+</form>
