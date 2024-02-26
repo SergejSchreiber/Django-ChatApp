@@ -1,31 +1,61 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <div class="page-content">
-        
     {% if request.user.is_authenticated %}
 
-    {% for message in messages %}
-    <div>
-        {{ message.author }}: <i> {{ message.text }} </i>
+    <div id="messageContainer">
+        {% for message in messages %}
+        <div>
+            <span class="color-gray"> [{{ message.created_at }}] </span>
+            {{ message.author }}: <i> {{ message.text }} </i>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 
-    <form id="chat-form" action="/chat/" method="post" return false>
+    <script>
+        async function sendMessage() {
+            let fd = new FormData();
+            let token = "{{ csrf_token }}";
+            fd.append("textmessage", messageField.value);
+            fd.append("csrfmiddlewaretoken", token);
+            try {
+                messageContainer.innerHTML += `
+                    <div id="deleteMessage">
+                        <span class="color-gray"> [DATUM]</span> {{ request.user.first_name}}: <i class="color-gray"> ${messageField.value} </i>
+                    </div>
+                    `;
+                await fetch("/chat/", {
+                    method: "POST",
+                    body: fd
+                });
+
+                document.getElementById('deleteMessage').remove();
+                messageContainer.innerHTML += `
+                    <div>
+                        <span class="color-gray"> [DATUM]</span> {{ request.user.first_name}}: <i> ${messageField.value} </i>
+                    </div>
+                    `;
+                console.log("Success!");
+            } catch (e) {
+                console.error("An error occured:", e);
+            }
+        }
+    </script>
+
+    <form onsubmit="sendMessage(); return false;" method="post">
         {% csrf_token %}
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" name="textmessage" required type="text" id="sample3">
-          <label class="mdl-textfield__label" for="sample3">Text...</label>
+            <input class="mdl-textfield__input" name="textmessage" required type="text" id="messageField" />
+            <label class="mdl-textfield__label" for="messageField">Text...</label>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Send</button>
     </form>
 
     {% else %}
-        <h1>Nicht eingeloggt</h1>
-        <p>Du bist nicht eingeloggt!</p>
-        <a href="/login/">HIER EINLOGGEN</a>
-         
-    
+    <h1>Nicht eingeloggt</h1>
+    <p>Du bist nicht eingeloggt!</p>
+    <a href="/login/">HIER EINLOGGEN</a>
+
     {% endif %}
 </div>
 
