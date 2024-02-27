@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block content %}
+
+
+{% if wrongPassword %}
+<p>Passwords are not the same</p>
+{% endif %}
+
+{% if wrongUser %}
+<p>Username already exists</p>
+{% endif %}
+
+<div class="page-content">
+    <h3>Registration</h3>
+    <form action="/registration/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="redirect" value="{{ redirect }}" />
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" name="username" required type="text" id="username" placeholder="Choose username...">
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" name="password" required type="password" id="password" placeholder="Choose password...">
+        </div>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" name="password-repeat" required type="password" id="password-repeat" placeholder="Repeat password...">
+        </div>
+        <div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">CREATE</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
