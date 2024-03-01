@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Chat, Message
 
 class MessageAdmin(admin.ModelAdmin):
-    fields = ('chat','text','created_at', 'author', 'receiver')
+    fields = ('chat','text','created_at', 'author', 'receiver',)
     readonly_fields = ('created_at',)
     list_display = ('chat','text', 'created_at', 'author', 'receiver',)
     search_fields = ('text',)

@@ -12,18 +12,22 @@
         {% endfor %}
     </div>
 
+
     <script>
         async function sendMessage() {
             let fd = new FormData();
             let token = "{{ csrf_token }}";
+            let formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             fd.append("textmessage", messageField.value);
             fd.append("csrfmiddlewaretoken", token);
             try {
                 messageContainer.innerHTML += `
                     <div id="deleteMessage">
-                        <span class="color-gray"> [DATUM]</span> {{ request.user.first_name}}: <i class="color-gray"> ${messageField.value} </i>
+                        <span class="color-gray">[<span id="current-date"></span>]</span> {{ request.user.first_name}}: <i class="color-gray"> ${messageField.value} </i>
                     </div>
-                    `;
+                `;
+                document.getElementById('current-date').textContent = formattedDate;
+                
                 await fetch("/chat/", {
                     method: "POST",
                     body: fd
@@ -32,10 +36,11 @@
                 document.getElementById('deleteMessage').remove();
                 messageContainer.innerHTML += `
                     <div>
-                        <span class="color-gray"> [DATUM]</span> {{ request.user.first_name}}: <i> ${messageField.value} </i>
+                        <span class="color-gray">[<span id="current-date"></span>]</span> {{ request.user.first_name}}: <i> ${messageField.value} </i>
                     </div>
                     `;
-                console.log("Success!");
+                document.getElementById('current-date').textContent = formattedDate;
+                location.reload();
             } catch (e) {
                 console.error("An error occured:", e);
             }
@@ -51,10 +56,16 @@
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Send</button>
     </form>
 
-    {% else %}
-    <h1>Nicht eingeloggt</h1>
-    <p>Du bist nicht eingeloggt!</p>
-    <a href="/login/">HIER EINLOGGEN</a>
+    <h3>Create new Chat</h3>
+
+    <form onsubmit="createChat(); return false;" method="post">
+        {% csrf_token %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="newChatName" required type="text" id="newChatName" />
+            <label class="mdl-textfield__label" for="newChatName">Enter a name for the new Chat...</label>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Create</button>
+    </form>
 
     {% endif %}
 </div>

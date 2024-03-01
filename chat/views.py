@@ -1,15 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from chat.models import Chat, Message
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 @login_required(login_url='/login/')
 
 def index(request):
-    print(request.method)
     if request.method == 'POST':
         print("Received data " + request.POST['textmessage'])
         myChat = Chat.objects.get(id=2)
@@ -44,3 +42,7 @@ def registration_view(request):
         return HttpResponseRedirect('/chat/')
 
     return render(request, 'auth/registration.html')
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/chat/')
