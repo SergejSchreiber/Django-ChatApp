@@ -15,31 +15,19 @@
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
             <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
-                    <!-- Title -->
                     <span class="mdl-layout-title">Welcome{% if user %}, {% endif %} {{ request.user }}!</span>
-                    <form action="{% url 'logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Logout</button>
-                    </form>
-                    <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
-                    <!-- Navigation. We hide it in small screens. -->
-                    <nav class="mdl-navigation mdl-layout--large-screen-only">
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                    </nav>
                 </div>
             </header>
             <div class="mdl-layout__drawer">
                 <span class="mdl-layout-title">Chatroom</span>
-                <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                    <a class="mdl-navigation__link" href="">Link</a>
-                </nav>
+                <span class="menu-text">
+                    <i>Welcome to the Chatroom. Please enter your message in the text line and send it with the button</i> 
+                </span>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Logout</button>
+                </form>
             </div>
             <main class="mdl-layout__content">
                 {% block content %}

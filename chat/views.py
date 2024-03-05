@@ -9,6 +9,20 @@ from django.contrib.auth.models import User
 @login_required(login_url='/login/')
 
 def index(request):
+    """
+    Render the chat HTML view.
+
+    This view renders the chat HTML page. If the request method is POST, it handles the submission
+    of new chat messages. It creates a new message object and returns its serialized JSON representation
+    as a JsonResponse. Otherwise, it retrieves existing chat messages and renders them along with the chat
+    HTML page.
+
+    Args:
+        request: HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered HTML page with chat messages.
+    """
     if request.method == 'POST':
         myChat = Chat.objects.get(id=2)
         new_message = Message.objects.create(text=request.POST['textmessage'], chat=myChat, author=request.user, receiver=request.user)
@@ -18,6 +32,20 @@ def index(request):
     return render(request, 'chat/index.html', {'messages': chatMessages})
 
 def login_view(request):
+    """
+    Handle user login.
+
+    This view handles user authentication and login. If the request method is POST, it attempts to
+    authenticate the user based on the provided username and password. If authentication is successful,
+    the user is logged in and redirected to the requested page. Otherwise, the login page is rendered
+    with an error message.
+
+    Args:
+        request: HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered login page.
+    """
     redirect = request.GET.get('next')
     if request.method == 'POST':
         user = authenticate(username=request.POST.get('username'), password=request.POST.get('password'))
@@ -29,6 +57,20 @@ def login_view(request):
     return render(request, 'auth/login.html', {'redirect': redirect })
 
 def registration_view(request):
+    """
+    Handle user registration.
+
+    This view handles user registration. If the request method is POST, it validates the registration
+    form data, creates a new user, logs in the user, and redirects to the chat page upon successful
+    registration. If the form data is invalid or the username already exists, the registration page
+    is rendered with appropriate error messages.
+
+    Args:
+        request: HTTP request object.
+
+    Returns:
+        HttpResponse: Rendered registration page.
+    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -46,5 +88,16 @@ def registration_view(request):
     return render(request, 'auth/registration.html')
 
 def logout_view(request):
+    """
+    Handle user logout.
+
+    This view handles user logout. It logs out the current user and redirects to the chat page.
+
+    Args:
+        request: HTTP request object.
+
+    Returns:
+        HttpResponseRedirect: Redirect to the chat page.
+    """
     logout(request)
     return HttpResponseRedirect('/chat/')

@@ -1,5 +1,14 @@
 .page-content {
-    padding: 100px 100px;
+    padding: 100px;
+
+    @media(max-width: 600px) {
+        padding: 50px;
+    }
+
+    @media(max-width: 500px) {
+        padding: 25px;
+    }
+
 }
 
 .color-gray {
@@ -12,5 +21,25 @@
         text-decoration: none;
         cursor: pointer;
         color: rgba(63, 81, 181, 75);
+    }
+}
+
+.mdl-layout-title {
+    padding-left: 0px !important;
+}
+
+.mdl-layout__drawer {
+    padding: 50px;
+}
+
+.menu-text {
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+#messageContainer {
+    padding-bottom: 15px;
+    div {
+        padding-bottom: 10px;
     }
 }
